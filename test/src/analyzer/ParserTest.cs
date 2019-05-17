@@ -1,8 +1,10 @@
 ﻿using System;
 
+using NSubstitute;
 using NUnit.Framework;
 
 using calculator.analyzer;
+using calculator.@operator.spec;
 
 namespace test.analyzer {
   
@@ -75,6 +77,29 @@ namespace test.analyzer {
       parser.ResolveOperations();
 
       Assert.AreEqual(expectedResult, parser.PopOperand(), 0);
+    }
+    
+    [Test]
+    public void Test() {
+      var binaryOperator = Substitute.For<IBinaryOperator>();
+      // ReSharper disable once HeapView.ClosureAllocation
+      // ReSharper disable once HeapView.ObjectAllocation.Evident
+      var parser = new Parser();
+      const double left = 42;
+      const double right = 27;
+      const char operator_ = '+';
+      const double expectedResult = 69;
+
+      parser.PushOperand(left);
+      parser.PushOperator(operator_);
+      parser.PushOperand(right);
+      parser.ResolveOperations();
+
+      binaryOperator.Apply(left, right).Returns(expectedResult);
+      
+      Assert.AreEqual(expectedResult, binaryOperator.Apply(left, right), 0);
+
+      binaryOperator.Received(1).Apply(left, right);
     }
   }
 }

@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using NSubstitute;
+﻿using NSubstitute;
+using NUnit.Framework;
 
 using calculator.@operator.impl;
 using calculator.@operator.spec;
